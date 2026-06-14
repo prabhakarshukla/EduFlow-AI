@@ -57,7 +57,13 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
-  const { supabaseUrl, supabaseAnonKey } = getSupabaseConfig();
+  const supabaseConfig = getSupabaseConfig();
+
+  if (!supabaseConfig) {
+    return response;
+  }
+
+  const { supabaseUrl, supabaseAnonKey } = supabaseConfig;
   const supabase = createSupabaseServerClient(
   request,
   response,
