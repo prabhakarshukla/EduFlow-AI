@@ -116,7 +116,7 @@ function createDisabledQueryBuilder() {
 	return builderProxy;
 }
 
-function createDisabledSupabaseClient() {
+function createDisabledSupabaseClient(): SupabaseClient {
 	const auth = createDisabledAuthClient();
 	const queryBuilder = createDisabledQueryBuilder();
 	const channel = createDisabledChannel();
@@ -133,11 +133,14 @@ function createDisabledSupabaseClient() {
 				return queryBuilder;
 			},
 		},
-	);
+	)as unknown as SupabaseClient;
 }
 
-const supabase = supabaseConfig
-	? createBrowserClient(supabaseConfig.supabaseUrl, supabaseConfig.supabaseAnonKey)
+const supabase: SupabaseClient = supabaseConfig
+	? createBrowserClient(
+			supabaseConfig.supabaseUrl,
+			supabaseConfig.supabaseAnonKey
+	  )
 	: createDisabledSupabaseClient();
 
 export { supabase };
