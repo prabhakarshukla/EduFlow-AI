@@ -144,6 +144,11 @@ export default function DashboardLayout({
         setAuthReady(true);
         router.replace(nextPathForLogin);
       }
+      const { data } = await supabase.auth.getSession();
+      if (!mounted) return;
+      setUser(data.session?.user ?? null);
+      setAuthReady(true);
+      if (!data.session?.user) router.replace(nextPathForLogin);
     })();
 
     return () => {

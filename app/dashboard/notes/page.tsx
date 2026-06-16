@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import jsPDF from "jspdf";
 import { supabase } from "../../../lib/supabase";
-import { FormattedNote } from "@/components/notes/formatted-note";
 import { parseNoteBlocks, stripInlineMarkdown } from "@/utils/noteFormatting";
+
+import { marked } from "marked";
+import { RichTextEditor } from "@/components/notes/rich-text-editor";
+import { DrawingCanvas } from "@/components/notes/drawing-canvas";
 import { useFeatureStatus } from "@/hooks/useFeatureStatus";
+
 
 type NoteRow = {
   id: string;
@@ -215,6 +219,8 @@ export default function NotesPage() {
 
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isDrawingOpen, setIsDrawingOpen] = useState(false);
+  const editorRef = useRef<any>(null);
 
   const [title, setTitle] = useState("");
   const [subject, setSubject] = useState("");
@@ -288,10 +294,10 @@ export default function NotesPage() {
   useEffect(() => {
     let alive = true;
     (async () => {
-      const { data, error: uErr } = await supabase.auth.getUser();
+      const { data, error: uErr } = await supabase.auth.getSession();
       if (!alive) return;
       if (uErr) setError(uErr.message);
-      if (data.user) await loadNotes();
+      if (data.session?.user) await loadNotes();
       else setLoading(false);
     })();
     return () => {
@@ -317,8 +323,8 @@ export default function NotesPage() {
     setSuccess(null);
     setSaving(true);
     try {
-      const { data: u } = await supabase.auth.getUser();
-      const user = u.user;
+      const { data: u } = await supabase.auth.getSession();
+      const user = u.session?.user;
       if (!user) {
         setError("You need to be logged in to create notes.");
         return;
@@ -437,6 +443,48 @@ export default function NotesPage() {
     }
   };
 
+  const handleSaveDrawing = async (blob: Blob) => {
+    try {
+      setSaving(true);
+      const { data: sessionData } = await supabase.auth.getSession();
+      const user = sessionData.session?.user;
+      if (!user) throw new Error("Not authenticated");
+
+      const fileName = `${user.id}/${Date.now()}.png`;
+      const { data, error } = await supabase.storage
+        .from("notes_images")
+        .upload(fileName, blob, { contentType: "image/png" });
+
+      if (error) {
+        console.warn("Storage upload failed, falling back to base64", error);
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          const base64data = reader.result as string;
+          if (editorRef.current) {
+            editorRef.current.chain().focus().setImage({ src: base64data }).run();
+            setContent(editorRef.current.getHTML());
+          }
+        };
+        return;
+      }
+
+      const { data: urlData } = supabase.storage
+        .from("notes_images")
+        .getPublicUrl(fileName);
+      
+      if (editorRef.current) {
+        editorRef.current.chain().focus().setImage({ src: urlData.publicUrl }).run();
+        setContent(editorRef.current.getHTML());
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to save drawing.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const togglePin = async (id: string, nextPinned: boolean) => {
     setError(null);
     const prev = notes;
@@ -497,23 +545,20 @@ export default function NotesPage() {
         throw new Error("AI returned empty notes.");
       }
 
-      setTitle(`${topic} Notes`);
-      setSubject(topic);
-      setContent("");
       setAiTyping(true);
 
-      let index = 0;
-      const chunkSize = 5;
-      const timer = window.setInterval(() => {
-        index += chunkSize;
-        setContent(generated.slice(0, index));
+      // Convert Markdown to HTML
+      const htmlContent = await marked.parse(generated);
 
-        if (index >= generated.length) {
-          window.clearInterval(timer);
-          setAiTyping(false);
-          flashSuccess("AI notes generated. Review and save.");
-        }
-      }, 10);
+      if (editorRef.current) {
+        editorRef.current.chain().focus().insertContent(`<br><hr><br><h3>AI Generated Content:</h3>${htmlContent}`).run();
+        setContent(editorRef.current.getHTML());
+      } else {
+        setContent((prev) => prev + `<br><hr><br><h3>AI Generated Content:</h3>${htmlContent}`);
+      }
+
+      setAiTyping(false);
+      flashSuccess("AI notes appended. Review and save.");
     } catch (e) {
       const errorMsg =
         e instanceof Error ? e.message : "Failed to generate notes.";
@@ -1168,49 +1213,32 @@ export default function NotesPage() {
                 >
                   Content
                 </label>
-                <textarea
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Write clean notes here… Use headings, bullet points, examples."
-                  className="rounded-xl px-3 py-3 text-sm w-full flex-1"
-                  style={{
-                    minHeight: "360px",
-                    resize: "none",
-                    background: "var(--ui-surface)",
-                    border: "1px solid rgba(110,231,216,0.15)",
-                    color: "var(--ui-heading)",
-                    outline: "none",
-                    lineHeight: 1.6,
-                  }}
-                  disabled={!selectedId || aiLoading || aiTyping}
-                />
+                <div className="flex-1 mt-1 mb-4" style={{ minHeight: "400px" }}>
+                  <RichTextEditor
+                    key={selectedId}
+                    content={content}
+                    onChange={setContent}
+                    onOpenDrawing={() => setIsDrawingOpen(true)}
+                    editorRef={editorRef}
+                  />
+                </div>
                 {aiTyping && (
                   <p className="mt-2 text-[11px] animate-pulse" style={{ color: "#0f766e" }}>
-                    AI is typing...
+                    AI is writing...
                   </p>
-                )}
-                {content.trim() && (
-                  <div
-                    className="mt-4 rounded-xl p-4"
-                    style={{
-                      background: "rgba(110,231,216,0.04)",
-                      border: "1px solid rgba(110,231,216,0.14)",
-                    }}
-                  >
-                    <p
-                      className="text-xs font-semibold uppercase tracking-widest mb-3"
-                      style={{ color: "var(--ui-muted)" }}
-                    >
-                      Formatted preview
-                    </p>
-                    <FormattedNote content={content} />
-                  </div>
                 )}
               </div>
             </>
           )}
         </Card>
       </div>
+
+      {isDrawingOpen && (
+        <DrawingCanvas 
+          onClose={() => setIsDrawingOpen(false)}
+          onSave={handleSaveDrawing}
+        />
+      )}
     </div>
   );
 }

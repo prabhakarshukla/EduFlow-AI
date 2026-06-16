@@ -31,9 +31,9 @@ export default function Navbar() {
   useEffect(() => {
     let alive = true;
     (async () => {
-      const { data } = await supabase.auth.getUser();
+      const { data } = await supabase.auth.getSession();
       if (!alive) return;
-      setUser(data.user ?? null);
+      setUser(data.session?.user ?? null);
       setAuthReady(true);
     })();
 

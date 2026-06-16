@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { GoChecklist } from "react-icons/go";
+import { CheckSquare, ChevronDown, ChevronUp, GripVertical, Plus, Trash2, X } from 'lucide-react';
 
 type Task = {
   id: string;
@@ -121,7 +122,7 @@ export default function FloatingTaskChecklist() {
         }}
         className="fixed bottom-6 right-6 z-[1000] flex h-16 w-16 items-center justify-center rounded-full border border-white/10 bg-gradient-to-br from-emerald-500 to-teal-500 text-2xl text-white shadow-[0_10px_30px_rgba(0,0,0,0.45)] transition-all duration-200 hover:scale-105 hover:shadow-[0_14px_35px_rgba(16,185,129,0.35)]"
       >
-        <GoChecklist />
+        <CheckSquare />
       </button>
 
       {/* Popup */}

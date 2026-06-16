@@ -1,0 +1,626 @@
+ Volume in drive X is jv
+ Volume Serial Number is 1217-CC01
+
+ Directory of X:\1TMP\prabha\EduFlow-AI
+
+15-06-2026  19:58    <DIR>          .
+15-06-2026  19:56    <DIR>          ..
+15-06-2026  19:57               220 .env.example
+15-06-2026  19:57    <DIR>          .github
+15-06-2026  19:57               435 .gitignore
+15-06-2026  19:57    <DIR>          .husky
+15-06-2026  19:58                 0 1.txt
+15-06-2026  19:57    <DIR>          app
+15-06-2026  19:57             4,283 CODE_OF_CONDUCT.md
+15-06-2026  19:57               660 commitlint.config.js
+15-06-2026  19:57    <DIR>          components
+15-06-2026  19:57    <DIR>          context
+15-06-2026  19:57            10,103 CONTRIBUTING.md
+15-06-2026  19:57    <DIR>          hooks
+15-06-2026  19:57    <DIR>          lib
+15-06-2026  19:57             1,329 LICENSE
+15-06-2026  19:57                56 next.config.js
+15-06-2026  19:57           160,956 package-lock.json
+15-06-2026  19:57               958 package.json
+15-06-2026  19:57                89 postcss.config.js
+15-06-2026  19:57             2,261 proxy.ts
+15-06-2026  19:57    <DIR>          public
+15-06-2026  19:57            11,700 README.md
+15-06-2026  19:57             2,019 SECURITY.md
+15-06-2026  19:57             4,059 STREAKS_SETUP.md
+15-06-2026  19:57    <DIR>          supabase
+15-06-2026  19:57             1,125 tailwind.config.ts
+15-06-2026  19:57               739 tsconfig.json
+15-06-2026  19:57    <DIR>          utils
+              17 File(s)        200,992 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git
+
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57               308 config
+15-06-2026  19:56                73 description
+15-06-2026  19:57                21 HEAD
+15-06-2026  19:56    <DIR>          hooks
+15-06-2026  19:57            11,934 index
+15-06-2026  19:56    <DIR>          info
+15-06-2026  19:57    <DIR>          logs
+15-06-2026  19:56    <DIR>          objects
+15-06-2026  19:57               112 packed-refs
+15-06-2026  19:57    <DIR>          refs
+               5 File(s)         12,448 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\hooks
+
+15-06-2026  19:56    <DIR>          .
+15-06-2026  19:56               478 applypatch-msg.sample
+15-06-2026  19:56             1,972 commit-msg.sample
+15-06-2026  19:56             4,611 fsmonitor-watchman.sample
+15-06-2026  19:56               189 post-update.sample
+15-06-2026  19:56               424 pre-applypatch.sample
+15-06-2026  19:56             1,649 pre-commit.sample
+15-06-2026  19:56               416 pre-merge-commit.sample
+15-06-2026  19:56             1,374 pre-push.sample
+15-06-2026  19:56             4,898 pre-rebase.sample
+15-06-2026  19:56               544 pre-receive.sample
+15-06-2026  19:56             1,492 prepare-commit-msg.sample
+15-06-2026  19:56             2,783 push-to-checkout.sample
+15-06-2026  19:56             2,308 sendemail-validate.sample
+15-06-2026  19:56             3,650 update.sample
+              14 File(s)         26,788 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\info
+
+15-06-2026  19:56    <DIR>          .
+15-06-2026  19:56               240 exclude
+               1 File(s)            240 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\logs
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57               195 HEAD
+15-06-2026  19:57    <DIR>          refs
+               1 File(s)            195 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\logs\refs
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57    <DIR>          heads
+15-06-2026  19:57    <DIR>          remotes
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\logs\refs\heads
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57               195 main
+               1 File(s)            195 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\logs\refs\remotes
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57    <DIR>          origin
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\logs\refs\remotes\origin
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57               195 HEAD
+               1 File(s)            195 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\objects
+
+15-06-2026  19:56    <DIR>          .
+15-06-2026  19:56    <DIR>          info
+15-06-2026  19:57    <DIR>          pack
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\objects\info
+
+15-06-2026  19:56    <DIR>          .
+15-06-2026  19:56    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\objects\pack
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:56    <DIR>          ..
+15-06-2026  19:57            33,048 pack-debab63cf7f2e78e63044d0f90accc9855ff49aa.idx
+15-06-2026  19:57         9,236,506 pack-debab63cf7f2e78e63044d0f90accc9855ff49aa.pack
+15-06-2026  19:57             4,620 pack-debab63cf7f2e78e63044d0f90accc9855ff49aa.rev
+               3 File(s)      9,274,174 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\refs
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          heads
+15-06-2026  19:57    <DIR>          remotes
+15-06-2026  19:56    <DIR>          tags
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\refs\heads
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57                41 main
+               1 File(s)             41 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\refs\remotes
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57    <DIR>          origin
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\refs\remotes\origin
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57                30 HEAD
+               1 File(s)             30 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.git\refs\tags
+
+15-06-2026  19:56    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.github
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57    <DIR>          ISSUE_TEMPLATE
+15-06-2026  19:57    <DIR>          PULL_REQUEST_TEMPLATE
+15-06-2026  19:57    <DIR>          workflows
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.github\ISSUE_TEMPLATE
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57               872 bug_report.md
+15-06-2026  19:57               498 docs.md
+15-06-2026  19:57               759 feature_request.md
+15-06-2026  19:57               480 general.md
+               4 File(s)          2,609 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.github\PULL_REQUEST_TEMPLATE
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57               677 bugfix.md
+15-06-2026  19:57               734 feature.md
+15-06-2026  19:57               587 general.md
+               3 File(s)          1,998 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.github\workflows
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             3,300 inactivity-bot.yml
+               1 File(s)          3,300 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\.husky
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57                86 commit-msg
+               1 File(s)             86 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57    <DIR>          about
+15-06-2026  19:57    <DIR>          api
+15-06-2026  19:57    <DIR>          auth
+15-06-2026  19:57    <DIR>          contact
+15-06-2026  19:57    <DIR>          dashboard
+15-06-2026  19:57    <DIR>          features
+15-06-2026  19:57             7,218 globals.css
+15-06-2026  19:57             1,850 layout.tsx
+15-06-2026  19:57    <DIR>          license
+15-06-2026  19:57               594 page.tsx
+15-06-2026  19:57    <DIR>          pricing
+15-06-2026  19:57    <DIR>          privacy
+15-06-2026  19:57    <DIR>          terms
+               3 File(s)          9,662 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\about
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             4,142 page.tsx
+               1 File(s)          4,142 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\api
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57    <DIR>          contact
+15-06-2026  19:57    <DIR>          doubt-solver
+15-06-2026  19:57    <DIR>          features
+15-06-2026  19:57    <DIR>          mood-suggestions
+15-06-2026  19:57    <DIR>          notes-generator
+15-06-2026  19:57    <DIR>          recommendations
+15-06-2026  19:57    <DIR>          study-recommender
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\api\contact
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             2,830 route.ts
+               1 File(s)          2,830 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\api\doubt-solver
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             2,618 route.ts
+               1 File(s)          2,618 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\api\features
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57    <DIR>          status
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\api\features\status
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57               246 route.ts
+               1 File(s)            246 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\api\mood-suggestions
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             1,866 route.ts
+               1 File(s)          1,866 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\api\notes-generator
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             1,405 route.ts
+               1 File(s)          1,405 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\api\recommendations
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            10,960 route.ts
+               1 File(s)         10,960 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\api\study-recommender
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             8,325 route.ts
+               1 File(s)          8,325 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\auth
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57    <DIR>          callback
+15-06-2026  19:57    <DIR>          forgot-password
+15-06-2026  19:57    <DIR>          login
+15-06-2026  19:57    <DIR>          signup
+15-06-2026  19:57    <DIR>          update-password
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\auth\callback
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             1,951 route.ts
+               1 File(s)          1,951 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\auth\forgot-password
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            10,007 page.tsx
+               1 File(s)         10,007 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\auth\login
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            13,507 page.tsx
+               1 File(s)         13,507 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\auth\signup
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            16,291 page.tsx
+               1 File(s)         16,291 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\auth\update-password
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            17,377 page.tsx
+               1 File(s)         17,377 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\contact
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             9,749 page.tsx
+               1 File(s)          9,749 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57    <DIR>          ai_recommender
+15-06-2026  19:57    <DIR>          doubt-solver
+15-06-2026  19:57            22,489 layout.tsx
+15-06-2026  19:57    <DIR>          mood
+15-06-2026  19:57    <DIR>          notes
+15-06-2026  19:57            74,278 page.tsx
+15-06-2026  19:57    <DIR>          productivity
+15-06-2026  19:57    <DIR>          settings
+15-06-2026  19:57    <DIR>          study-planner
+15-06-2026  19:57    <DIR>          study-rooms
+15-06-2026  19:57    <DIR>          timetable
+               2 File(s)         96,767 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\ai_recommender
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            21,427 page.tsx
+               1 File(s)         21,427 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\doubt-solver
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            16,723 page.tsx
+               1 File(s)         16,723 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\mood
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            39,705 page.tsx
+               1 File(s)         39,705 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\notes
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            43,907 page.tsx
+               1 File(s)         43,907 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\productivity
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            27,556 page.tsx
+               1 File(s)         27,556 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\settings
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            21,376 page.tsx
+               1 File(s)         21,376 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\study-planner
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            56,480 page.tsx
+               1 File(s)         56,480 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\study-rooms
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             6,357 page.tsx
+15-06-2026  19:57    <DIR>          [id]
+               1 File(s)          6,357 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\study-rooms\[id]
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             2,455 page.tsx
+               1 File(s)          2,455 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\dashboard\timetable
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            45,775 page.tsx
+               1 File(s)         45,775 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\features
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             7,357 page.tsx
+               1 File(s)          7,357 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\license
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             9,371 page.tsx
+               1 File(s)          9,371 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\pricing
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             1,307 page.tsx
+               1 File(s)          1,307 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\privacy
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57            16,682 page.tsx
+               1 File(s)         16,682 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\app\terms
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             9,674 page.tsx
+               1 File(s)          9,674 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\components
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57             6,604 FloatingTaskChecklist.tsx
+15-06-2026  19:57    <DIR>          layout
+15-06-2026  19:57             1,097 MemberList.tsx
+15-06-2026  19:57    <DIR>          notes
+15-06-2026  19:57            18,405 RecommendationCard.tsx
+15-06-2026  19:57             2,930 RoomChat.tsx
+15-06-2026  19:57             1,927 RoomTimer.tsx
+15-06-2026  19:57               931 ScrollToTop.tsx
+15-06-2026  19:57    <DIR>          sections
+15-06-2026  19:57             1,791 SharedNotes.tsx
+               7 File(s)         33,685 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\components\layout
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             6,693 footer.tsx
+15-06-2026  19:57            10,775 navbar.tsx
+               2 File(s)         17,468 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\components\notes
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             2,896 formatted-note.tsx
+               1 File(s)          2,896 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\components\sections
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             7,002 CTA.tsx
+15-06-2026  19:57            10,080 features.tsx
+15-06-2026  19:57             6,190 hero.tsx
+               3 File(s)         23,272 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\context
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57             1,682 ThemeContext.tsx
+               1 File(s)          1,682 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\hooks
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57               873 useFeatureStatus.ts
+15-06-2026  19:57             1,784 useRealtimeChat.ts
+15-06-2026  19:57             5,079 useRecommendations.ts
+15-06-2026  19:57             1,357 useStudyRoom.ts
+15-06-2026  19:57               139 useTheme.ts
+               5 File(s)          9,232 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\lib
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57    <DIR>          ai
+15-06-2026  19:57             1,612 env-check.ts
+15-06-2026  19:57             5,112 streaks.ts
+15-06-2026  19:57               413 supabase-config.ts
+15-06-2026  19:57               739 supabase-server.ts
+15-06-2026  19:57               253 supabase.ts
+               5 File(s)          8,129 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\lib\ai
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57    <DIR>          agents
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\lib\ai\agents
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             2,110 agent-router.ts
+15-06-2026  19:57             1,035 mood-agent.ts
+15-06-2026  19:57             1,640 notes-agent.ts
+15-06-2026  19:57             2,559 planner-agent.ts
+15-06-2026  19:57             1,090 productivity-agent.ts
+15-06-2026  19:57             2,703 recommendation-agent.ts
+15-06-2026  19:57             8,512 shared.ts
+15-06-2026  19:57             2,677 timetable-agent.ts
+15-06-2026  19:57             1,660 tutor-agent.ts
+               9 File(s)         23,986 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\public
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57    <DIR>          images
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\public\images
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57           191,880 ai-doubt-solver.png
+15-06-2026  19:57           637,654 dashboard.png
+15-06-2026  19:57           461,372 features.png
+15-06-2026  19:57            37,044 hero.jpg
+15-06-2026  19:57           103,876 hero1.jpg
+15-06-2026  19:57         1,877,913 landing-page.png
+15-06-2026  19:57           261,753 logo.png
+15-06-2026  19:57           349,771 mood-tracker.png
+15-06-2026  19:57           210,189 notes.png
+15-06-2026  19:57           241,253 productivity-tracker.png
+15-06-2026  19:57           228,328 study-planner.png
+15-06-2026  19:57           179,905 study-room.png
+15-06-2026  19:57           189,147 weekly-timetable.png
+              13 File(s)      4,970,085 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\supabase
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57    <DIR>          migrations
+               0 File(s)              0 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\supabase\migrations
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:57    <DIR>          ..
+15-06-2026  19:57             1,885 20260528123000_initial_schema.sql
+15-06-2026  19:57             1,237 20260528_create_timetable_slots.sql
+15-06-2026  19:57             3,936 20260605151500_study_rooms.sql
+               3 File(s)          7,058 bytes
+
+ Directory of X:\1TMP\prabha\EduFlow-AI\utils
+
+15-06-2026  19:57    <DIR>          .
+15-06-2026  19:58    <DIR>          ..
+15-06-2026  19:57             3,963 noteFormatting.ts
+               1 File(s)          3,963 bytes
+
+     Total Files Listed:
+             138 File(s)     15,158,602 bytes
+             202 Dir(s)  354,287,554,560 bytes free
