@@ -5,49 +5,49 @@ import React from 'react';
 
 const features = [
   {
-    title: 'Study Planner',
+    title: 'Weekly Timetable',
     details:
-      'Organise your entire semester in minutes. Set tasks, deadlines, and daily goals — and let AI optimise your schedule automatically.',
+      'Stay on top of your schedule with a dynamic weekly timetable that maps out your classes, study sessions, and breaks seamlessly.',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
       </svg>
     ),
     accent: '#6EE7D8',
     accentBg: 'rgba(110,231,216,0.10)',
     tag: 'Planning',
-    href: '/dashboard/study-planner',
+    href: '/dashboard/timetable',
   },
   {
-    title: 'AI Doubt Solver',
+    title: 'Study Rooms',
     details:
-      'Ask any academic question and get clear, instant explanations with examples — across every subject, 24 hours a day.',
+      'Join virtual, focus-driven study rooms to collaborate with peers, share resources, and stay accountable in real time.',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-          d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
       </svg>
     ),
     accent: '#14B8A6',
     accentBg: 'rgba(20,184,166,0.10)',
-    tag: 'AI-Powered',
-    href: '/dashboard/doubt-solver',
+    tag: 'Collaboration',
+    href: '/dashboard/study-rooms',
   },
   {
-    title: 'Notes Generator',
+    title: 'AI Recommender',
     details:
-      'Paste any lecture or topic and get structured, revision-ready notes in seconds. Clean formatting. Zero effort.',
+      'Receive personalized study suggestions, smart resource recommendations, and tailored paths based on your learning habits.',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          d="M13 10V3L4 14h7v7l9-11h-7z" />
       </svg>
     ),
     accent: '#5EEAD4',
     accentBg: 'rgba(94,234,212,0.10)',
-    tag: 'Notes',
-    href: '/dashboard/notes',
+    tag: 'AI-Powered',
+    href: '/dashboard/ai-recommender',
   },
   {
     title: 'Productivity Tracker',
@@ -262,7 +262,7 @@ function FeatureCard({ title, details, icon, accent, accentBg, tag, href }: Card
           <div
             className="h-px flex-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-250"
             style={{ background: `linear-gradient(90deg, ${accent}55, transparent)` }}
-          />
+          ></div>
           <span
             className="text-[10px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-1"
             style={{ color: accent }}
