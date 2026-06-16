@@ -3,31 +3,27 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { account, databases, appwriteConfig } from "@/lib/appwrite";
+import { ID, AppwriteException } from "appwrite";
 
 function getAuthErrorMessage(message: string) {
   const lower = message.toLowerCase();
 
-  if (lower.includes("already registered") || lower.includes("already exists")) {
+  if (lower.includes("already exists")) {
     return "An account already exists for this email. Please log in instead.";
   }
   if (lower.includes("password")) {
     return "Please use a stronger password. It should be at least 8 characters.";
-  }
-  if (lower.includes("token") || lower.includes("expired")) {
-    return "The code is invalid or has expired. Please try again.";
   }
 
   return message;
 }
 
 export default function SignupPage() {
-  const [step, setStep] = useState<"details" | "otp">("details");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -35,8 +31,12 @@ export default function SignupPage() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const { data } = await supabase.auth.getSession();
-      if (mounted && data.session) router.replace("/dashboard");
+      try {
+        const session = await account.getSession("current");
+        if (mounted && session) router.replace("/dashboard");
+      } catch (err) {
+        // No session exists
+      }
     })();
     return () => {
       mounted = false;
@@ -48,56 +48,43 @@ export default function SignupPage() {
     setError(null);
     setLoading(true);
     try {
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email: email.trim(),
-        password: password,
-        options: {
-          data: { full_name: name.trim() },
-        },
-      });
-
-      if (signUpError) {
-        setError(getAuthErrorMessage(signUpError.message));
-        return;
-      }
+      // Create user account
+      const user = await account.create(ID.unique(), email.trim(), password, name.trim());
       
-      // If auto-login happens (email confirmations disabled in Supabase)
-      if (data.session) {
-        router.replace("/dashboard");
-        router.refresh();
-        return;
+      try {
+        // Create an active session to write to the database
+        await account.createEmailPasswordSession(email.trim(), password);
+        
+        // Store user data in Appwrite Database
+        if (appwriteConfig.databaseId && appwriteConfig.usersCollectionId) {
+          await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.usersCollectionId,
+            user.$id,
+            {
+              email: user.email,
+              full_name: user.name,
+              // Add other necessary default fields for your users table here
+            }
+          );
+        }
+        
+        // Delete the session so they are forced to log in as per requirements
+        await account.deleteSession("current");
+      } catch (dbError) {
+        console.error("Database storage error:", dbError);
+        // We still created the user, so we can proceed to login, 
+        // but maybe logout just in case
+        try { await account.deleteSession("current"); } catch(e) {}
       }
-      
-      setStep("otp");
+
+      router.push("/auth/login?registered=true");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not create account. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-    try {
-      const { data, error: verifyError } = await supabase.auth.verifyOtp({
-        email: email.trim(),
-        token: otp.trim(),
-        type: "signup",
-      });
-
-      if (verifyError) {
-        setError(getAuthErrorMessage(verifyError.message));
-        return;
+      if (err instanceof AppwriteException) {
+        setError(getAuthErrorMessage(err.message));
+      } else {
+        setError(err instanceof Error ? err.message : "Could not create account. Please try again.");
       }
-
-      if (data.session) {
-        router.replace("/dashboard");
-        router.refresh();
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Verification failed.");
     } finally {
       setLoading(false);
     }
@@ -126,14 +113,14 @@ export default function SignupPage() {
           <div className="px-8 py-8">
             <div className="mb-6">
               <h1 className="text-[22px] font-bold tracking-tight mb-1.5" style={{ color: "#e2fdf9" }}>
-                {step === "details" ? "Create your account" : "Verify your email"}
+                Create your account
               </h1>
               <p className="text-sm" style={{ color: "#7ca8a3" }}>
-                {step === "details" ? "Start your AI-powered study journey — free forever." : `We sent a 6-digit code to ${email}`}
+                Start your AI-powered study journey — free forever.
               </p>
             </div>
 
-            <form onSubmit={step === "details" ? handleSignup : handleVerifyOtp} className="flex flex-col gap-4">
+            <form onSubmit={handleSignup} className="flex flex-col gap-4">
               {error && (
                 <div className="flex items-start gap-2.5 rounded-xl px-3.5 py-3 text-sm" role="alert" style={{ background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.22)", color: "#fca5a5" }}>
                   <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -141,31 +128,22 @@ export default function SignupPage() {
                 </div>
               )}
 
-              {step === "details" ? (
-                <>
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold" style={{ color: "rgba(209,250,245,0.75)" }}>Full name</label>
-                    <input type="text" placeholder="Priya Sharma" value={name} onChange={(e) => setName(e.target.value)} required className="input" autoComplete="name" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold" style={{ color: "rgba(209,250,245,0.75)" }}>Email address</label>
-                    <input type="email" placeholder="you@university.edu" value={email} onChange={(e) => setEmail(e.target.value)} required className="input" autoComplete="email" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold" style={{ color: "rgba(209,250,245,0.75)" }}>Password</label>
-                    <input type={showPassword ? "text" : "password"} placeholder="Create a strong password" value={password} onChange={(e) => setPassword(e.target.value)} required className="input" autoComplete="new-password" minLength={8} />
-                    <div className="flex items-center gap-2 pt-1">
-                      <input id="signup-show-password" type="checkbox" checked={showPassword} onChange={(e) => setShowPassword(e.target.checked)} className="h-4 w-4 rounded border" style={{ accentColor: "#6EE7D8" }} />
-                      <label htmlFor="signup-show-password" className="text-xs font-medium select-none" style={{ color: "rgba(209,250,245,0.7)" }}>Show password</label>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold" style={{ color: "rgba(209,250,245,0.75)" }}>6-Digit Verification Code</label>
-                  <input type="text" placeholder="123456" value={otp} onChange={(e) => setOtp(e.target.value)} required className="input text-center tracking-widest text-lg font-mono" autoComplete="one-time-code" maxLength={6} pattern="[0-9]*" inputMode="numeric" />
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold" style={{ color: "rgba(209,250,245,0.75)" }}>Full name</label>
+                <input type="text" placeholder="Priya Sharma" value={name} onChange={(e) => setName(e.target.value)} required className="input" autoComplete="name" />
+              </div>
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold" style={{ color: "rgba(209,250,245,0.75)" }}>Email address</label>
+                <input type="email" placeholder="you@university.edu" value={email} onChange={(e) => setEmail(e.target.value)} required className="input" autoComplete="email" />
+              </div>
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold" style={{ color: "rgba(209,250,245,0.75)" }}>Password</label>
+                <input type={showPassword ? "text" : "password"} placeholder="Create a strong password" value={password} onChange={(e) => setPassword(e.target.value)} required className="input" autoComplete="new-password" minLength={8} />
+                <div className="flex items-center gap-2 pt-1">
+                  <input id="signup-show-password" type="checkbox" checked={showPassword} onChange={(e) => setShowPassword(e.target.checked)} className="h-4 w-4 rounded border" style={{ accentColor: "#6EE7D8" }} />
+                  <label htmlFor="signup-show-password" className="text-xs font-medium select-none" style={{ color: "rgba(209,250,245,0.7)" }}>Show password</label>
                 </div>
-              )}
+              </div>
 
               <button
                 type="submit"
@@ -178,14 +156,8 @@ export default function SignupPage() {
                   cursor: loading ? "not-allowed" : "pointer",
                 }}
               >
-                {loading ? "Please wait..." : step === "details" ? "Sign Up" : "Verify and Login"}
+                {loading ? "Please wait..." : "Sign Up"}
               </button>
-              
-              {step === "otp" && (
-                <button type="button" onClick={() => setStep("details")} className="text-xs font-semibold mt-2 transition-colors duration-150" style={{ color: "rgba(110,231,216,0.60)" }}>
-                  ← Use a different email
-                </button>
-              )}
             </form>
 
             <div className="flex items-center gap-3 my-5">

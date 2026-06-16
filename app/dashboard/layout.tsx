@@ -123,22 +123,31 @@ export default function DashboardLayout({
     let mounted = true;
 
     (async () => {
-      const { data } = await supabase.auth.getUser();
-      if (!mounted) return;
-      setUser(data.user ?? null);
-      setAuthReady(true);
-      if (!data.user) router.replace(nextPathForLogin);
+      try {
+        const { account } = await import("../../lib/appwrite");
+        const appwriteUser = await account.get();
+        if (!mounted) return;
+        
+        // Map Appwrite user to the User type expected by the layout
+        const mappedUser = {
+          id: appwriteUser.$id,
+          email: appwriteUser.email,
+          user_metadata: {
+            full_name: appwriteUser.name,
+          }
+        } as unknown as User;
+        
+        setUser(mappedUser);
+        setAuthReady(true);
+      } catch (err) {
+        if (!mounted) return;
+        setAuthReady(true);
+        router.replace(nextPathForLogin);
+      }
     })();
-
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setAuthReady(true);
-      if (!session?.user) router.replace(nextPathForLogin);
-    });
 
     return () => {
       mounted = false;
-      sub.subscription.unsubscribe();
     };
   }, [router, nextPathForLogin]);
 
@@ -190,7 +199,12 @@ export default function DashboardLayout({
   ).toUpperCase();
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    try {
+      const { account } = await import("../../lib/appwrite");
+      await account.deleteSession("current");
+    } catch (e) {
+      console.error(e);
+    }
     setUser(null);
     router.replace("/auth/login");
     router.refresh();

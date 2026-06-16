@@ -449,22 +449,24 @@ export default function DashboardPage() {
       setError(null);
       setLoading(true);
       try {
-        const { data: u, error: uErr } = await supabase.auth.getUser();
+        const { account } = await import("../../lib/appwrite");
+        const appwriteUser = await account.get();
         if (!alive) return;
-        if (uErr) {
-          setError(uErr.message);
-          return;
-        }
-        if (!u.user) {
-          setError("You need to be logged in.");
-          return;
-        }
+        
+        // Map Appwrite user to the User type expected
+        const mappedUser = {
+          id: appwriteUser.$id,
+          email: appwriteUser.email,
+          user_metadata: {
+            full_name: appwriteUser.name,
+          }
+        };
 
-        setDisplayName(resolveDisplayName(u.user));
+        setDisplayName(resolveDisplayName(mappedUser as any));
         setWeeklyProgress(buildWeeklyProgressDays());
         setWeeklyProgressError(null);
 
-        const userId = u.user.id;
+        const userId = appwriteUser.$id;
 
         const [
           allTasksRes,

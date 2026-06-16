@@ -22,7 +22,7 @@ export default function Hero() {
           alt="EduFlow AI hero image"
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover object-center"
         />
       </div>
@@ -34,7 +34,7 @@ export default function Hero() {
           alt="EduFlow AI hero background"
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 1024px) 100vw, 100vw"
           className="object-cover object-center"
         />
         <div
