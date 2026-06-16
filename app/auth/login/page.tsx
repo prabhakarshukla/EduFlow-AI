@@ -55,6 +55,10 @@ function LoginPageContent() {
     let mounted = true;
     (async () => {
       try {
+        // Check for session in localStorage to prevent 401 console error when not logged in
+        const fallback = typeof window !== 'undefined' ? localStorage.getItem('cookieFallback') : null;
+        if (!fallback || fallback === '[]') return;
+
         const session = await account.getSession("current");
         if (mounted && session) router.replace(nextPath);
       } catch (err) {
@@ -83,6 +87,13 @@ function LoginPageContent() {
     setSuccess(null);
     setLoading(true);
     try {
+      // Clear any potential stale session first to prevent 'Creation of a session is prohibited' 401 errors
+      try {
+        await account.deleteSession("current");
+      } catch (e) {
+        // Ignore if no session exists
+      }
+      
       await account.createEmailPasswordSession(email.trim(), password);
       router.replace(nextPath);
       router.refresh();

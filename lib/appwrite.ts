@@ -17,4 +17,15 @@ export const account = new Account(client);
 export const databases = new Databases(client);
 export const storage = new Storage(client);
 
+// Suppress the annoying Appwrite localStorage warning in the browser console
+if (typeof window !== 'undefined' && typeof console !== 'undefined') {
+  const originalWarn = console.warn;
+  console.warn = (...args) => {
+    if (args[0] && typeof args[0] === 'string' && args[0].includes('Appwrite is using localStorage')) {
+      return;
+    }
+    originalWarn(...args);
+  };
+}
+
 export default client;

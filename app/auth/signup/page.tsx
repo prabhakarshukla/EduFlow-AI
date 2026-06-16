@@ -32,6 +32,10 @@ export default function SignupPage() {
     let mounted = true;
     (async () => {
       try {
+        // Check for session in localStorage to prevent 401 console error when not logged in
+        const fallback = typeof window !== 'undefined' ? localStorage.getItem('cookieFallback') : null;
+        if (!fallback || fallback === '[]') return;
+
         const session = await account.getSession("current");
         if (mounted && session) router.replace("/dashboard");
       } catch (err) {
@@ -52,6 +56,9 @@ export default function SignupPage() {
       const user = await account.create(ID.unique(), email.trim(), password, name.trim());
       
       try {
+        // Clear any stale session first
+        try { await account.deleteSession("current"); } catch(e) {}
+        
         // Create an active session to write to the database
         await account.createEmailPasswordSession(email.trim(), password);
         

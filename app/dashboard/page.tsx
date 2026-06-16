@@ -634,7 +634,7 @@ export default function DashboardPage() {
               slotsErr.message?.toLowerCase().includes("does not exist");
 
             if (isTableMissing) {
-              const localData = localStorage.getItem(`timetable_slots_${u.user.id}`);
+              const localData = localStorage.getItem(`timetable_slots_${userId}`);
               if (localData) {
                 const parsed = JSON.parse(localData);
                 todaySlotsData = parsed.filter((s: any) => s.day === todayDayName);

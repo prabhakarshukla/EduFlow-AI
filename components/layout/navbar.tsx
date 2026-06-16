@@ -37,7 +37,7 @@ export default function Navbar() {
       setAuthReady(true);
     })();
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((_event: string, session: any) => {
       setUser(session?.user ?? null);
       setAuthReady(true);
     });

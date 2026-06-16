@@ -136,12 +136,18 @@ function createDisabledSupabaseClient(): SupabaseClient {
 	)as unknown as SupabaseClient;
 }
 
+<<<<<<< HEAD
 const supabase: SupabaseClient = supabaseConfig
 	? createBrowserClient(
 			supabaseConfig.supabaseUrl,
 			supabaseConfig.supabaseAnonKey
 	  )
 	: createDisabledSupabaseClient();
+=======
+const supabase = (supabaseConfig
+	? createBrowserClient(supabaseConfig.supabaseUrl, supabaseConfig.supabaseAnonKey)
+	: createDisabledSupabaseClient()) as any as SupabaseLikeClient;
+>>>>>>> f82fb74 (feat: add otp verification)
 
 export { supabase };
 

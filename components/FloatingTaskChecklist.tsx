@@ -38,7 +38,7 @@ export default function FloatingTaskChecklist() {
     }
 
     if (data) {
-      const filteredTasks = data.filter((task) => {
+      const filteredTasks = data.filter((task: any) => {
         // Always show pending tasks
         if (task.status !== "done") return true;
 

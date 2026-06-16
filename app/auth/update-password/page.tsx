@@ -168,7 +168,7 @@ function UpdatePasswordContent() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event) => {
+    } = supabase.auth.onAuthStateChange((event: string) => {
       if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") {
         setSessionReady(true);
         setError(null);
