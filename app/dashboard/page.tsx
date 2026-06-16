@@ -647,7 +647,7 @@ export default function DashboardPage() {
           }
         } catch (err) {
           console.error("Error loading timetable slots:", err);
-          const localData = localStorage.getItem(`timetable_slots_${u.user.id}`);
+          const localData = localStorage.getItem(`timetable_slots_${userId}`);
           if (localData) {
             const parsed = JSON.parse(localData);
             todaySlotsData = parsed.filter((s: any) => s.day === todayDayName);
