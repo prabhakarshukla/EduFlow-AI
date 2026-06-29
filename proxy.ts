@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { getSupabaseConfig } from "@/lib/supabase-config";
+import { rateLimit } from "@/lib/rateLimit";
 
 function redirectTo(
   request: NextRequest,
@@ -20,7 +21,27 @@ function redirectTo(
 }
 
 export async function proxy(request: NextRequest) {
-  const { pathname, search } = request.nextUrl;
+  const pathname = request.nextUrl.pathname;
+
+  if (pathname === "/api/auth/login" || pathname === "/api/auth/signup") {
+    const forwardedFor = request.headers.get("x-forwarded-for");
+
+    const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "unknown";
+
+    if (!rateLimit(ip)) {
+      return NextResponse.json(
+        { error: "Too many requests" },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": "60",
+          },
+        },
+      );
+    }
+  }
+
+  const {search} = request.nextUrl;
   const searchParams = request.nextUrl.searchParams;
 
   const isDashboardRoute =
@@ -31,6 +52,7 @@ export async function proxy(request: NextRequest) {
     "/auth/signup",
     "/auth/forgot-password",
     "/auth/update-password",
+    "/auth/otp",
   ];
   const isPublicAuthRoute = publicAuthRoutes.includes(pathname);
   const hasRecoveryParams =
@@ -59,10 +81,10 @@ export async function proxy(request: NextRequest) {
 
   const { supabaseUrl, supabaseAnonKey } = getSupabaseConfig();
   const supabase = createSupabaseServerClient(
-  request,
-  response,
-  supabaseUrl,
-  supabaseAnonKey
+    request,
+    response,
+    supabaseUrl,
+    supabaseAnonKey,
   );
 
   const {
@@ -85,5 +107,8 @@ export const config = {
     "/auth/signup",
     "/auth/forgot-password",
     "/auth/update-password",
+    "/auth/otp",
+    "/api/auth/login",
+    "/api/auth/signup",
   ],
 };

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { routeAgent } from "@/lib/ai/agents/agent-router";
 
 export async function POST(req: Request) {
+ 
   try {
     const { topic } = await req.json();
 

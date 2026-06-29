@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../../../lib/supabase";
+import { captureEvent } from "@/lib/posthog/helpers";
+import { EVENTS } from "@/lib/posthog/events";
 
 type MoodEntry = {
   id: string;
@@ -191,6 +193,7 @@ export default function MoodTrackerPage() {
         return;
       }
 
+      captureEvent(EVENTS.MOOD_LOGGED, { mood_value: mood, has_note: !!note.trim() });
       setSuccess("Saved.");
       setNote("");
       setOccurredAt("");
@@ -215,6 +218,8 @@ export default function MoodTrackerPage() {
       if (delErr) {
         setEntries(prev);
         setError(delErr.message);
+      } else {
+        captureEvent(EVENTS.MOOD_ENTRY_DELETED);
       }
     } catch (e) {
       setEntries(prev);
@@ -291,6 +296,7 @@ export default function MoodTrackerPage() {
       }
 
       const suggestionText = aiResponse.trim();
+      captureEvent(EVENTS.MOOD_SUGGESTION_REQUESTED, { mood_state: suggestionMood });
       setSuggestion("");
       setSuggestionTyping(true);
 

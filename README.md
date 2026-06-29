@@ -143,6 +143,10 @@ The project includes a multi-agent AI approach, allowing different AI workflows 
 - AI-powered notes generation
 - AI-powered doubt solving
 
+### Analytics
+
+- PostHog — product analytics, event tracking, and error monitoring
+
 ### Utilities
 
 - PDF export
@@ -212,6 +216,8 @@ Create a `.env` & `.env.local` file in the root directory:
 .env{
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=
+NEXT_PUBLIC_POSTHOG_HOST=
 }
 env.local{
 AI_PROVIDER=gemini
@@ -257,6 +263,8 @@ EduFlow AI separates its environment variables into core required variables (nee
 | `RESEND_API_KEY` | `.env.local` | *Optional* | API key for Resend email service. Required for sending contact form submissions. | `re_19...` |
 | `CONTACT_TO_EMAIL` | `.env.local` | *Optional* | Destination email address to receive contact form submissions. | `support@eduflow.ai` |
 | `RESEND_FROM_EMAIL` | `.env.local` | *Optional* | The verified sender email address in Resend for sending messages. | `onboarding@resend.dev` |
+| `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` | `.env` | *Optional* | PostHog project API token for analytics and event tracking. Get it from your PostHog project settings. | `phc_...` |
+| `NEXT_PUBLIC_POSTHOG_HOST` | `.env` | *Optional* | PostHog ingestion host. Use the default US or EU cloud host, or your self-hosted URL. | `https://us.i.posthog.com` |
 
 > [!NOTE]
 > Contributors who do not wish to work on AI or email features can skip setting `GEMINI_API_KEY` and `RESEND_API_KEY`. The core study planner, notes CRUD, productivity tracker, and timetable features will remain fully functional, and the inactive features will be gracefully disabled in the UI.
@@ -361,6 +369,7 @@ Thanks to the tools and platforms that make this project possible:
 - OpenRouter
 - LLM providers
 - Vercel ecosystem
+- PostHog
 
 ---
 

@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { getNextReview } from "@/lib/srs";
+import { captureEvent } from "@/lib/posthog/helpers";
+import { EVENTS } from "@/lib/posthog/events";
 
 type Flashcard = {
   id: string;

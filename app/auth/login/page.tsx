@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
+import { captureEvent } from "../../../lib/posthog/helpers";
+import { EVENTS } from "../../../lib/posthog/events";
 
 function getAuthErrorMessage(message: string) {
   const lower = message.toLowerCase();
@@ -61,20 +63,36 @@ function LoginPageContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
     setLoading(true);
+    setError(null);
+
     try {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
-      if (signInError) {
-        setError(getAuthErrorMessage(signInError.message));
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        const errorMessage = data.error || "Login failed. Please try again.";
+        captureEvent(EVENTS.AUTH_ERROR, {
+          error_type: errorMessage,
+          page: "login",
+        });
+        setError(getAuthErrorMessage(errorMessage));
         return;
       }
+
+      captureEvent(EVENTS.USER_LOGGED_IN, { method: "email" });
       router.replace(nextPath);
       router.refresh();
     } catch (err) {
+      captureEvent(EVENTS.AUTH_ERROR, {
+        error_type: err instanceof Error ? err.message : "unknown",
+        page: "login",
+      });
       setError(
         err instanceof Error
           ? getAuthErrorMessage(err.message)
@@ -117,16 +135,7 @@ function LoginPageContent() {
         <div className="flex justify-center mb-8">
           <Link
             href="/"
-            className="inline-flex transition-all duration-200"
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = "scale(1.05)";
-              (e.currentTarget as HTMLElement).style.filter =
-                "drop-shadow(0 0 16px rgba(110,231,216,0.45))";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = "scale(1)";
-              (e.currentTarget as HTMLElement).style.filter = "none";
-            }}
+            className="inline-flex transition-all duration-200 hover:scale-105 hover:drop-shadow-[0_0_16px_rgba(110,231,216,0.45)]"
           >
             <img
               src="/images/logo.png"
@@ -222,15 +231,7 @@ function LoginPageContent() {
                   </label>
                   <Link
                     href="/auth/forgot-password"
-                    className="text-xs font-medium transition-colors duration-150"
-                    style={{ color: "rgba(110,231,216,0.60)" }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.color = "#6EE7D8";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.color =
-                        "rgba(110,231,216,0.60)";
-                    }}
+                    className="text-xs font-medium transition-colors duration-150 text-[rgba(110,231,216,0.60)] hover:text-[#6EE7D8]"
                   >
                     Forgot password?
                   </Link>
@@ -266,7 +267,7 @@ function LoginPageContent() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 mt-1 py-3 rounded-xl text-sm font-bold transition-all duration-200"
+                className="w-full flex items-center justify-center gap-2 mt-1 py-3 rounded-xl text-sm font-bold transition-all duration-200 enabled:hover:shadow-[0_6px_22px_rgba(110,231,216,0.46)] enabled:hover:-translate-y-px"
                 style={{
                   background: loading
                     ? "rgba(110,231,216,0.35)"
@@ -276,20 +277,6 @@ function LoginPageContent() {
                     ? "none"
                     : "0 4px 16px rgba(110,231,216,0.30)",
                   cursor: loading ? "not-allowed" : "pointer",
-                }}
-                onMouseEnter={(e) => {
-                  if (!loading) {
-                    (e.currentTarget as HTMLElement).style.boxShadow =
-                      "0 6px 22px rgba(110,231,216,0.46)";
-                    (e.currentTarget as HTMLElement).style.transform =
-                      "translateY(-1px)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow =
-                    "0 4px 16px rgba(110,231,216,0.30)";
-                  (e.currentTarget as HTMLElement).style.transform =
-                    "translateY(0)";
                 }}
               >
                 {loading ? (
@@ -342,16 +329,19 @@ function LoginPageContent() {
               Don&apos;t have an account?{" "}
               <Link
                 href="/auth/signup"
-                className="font-semibold transition-colors duration-150"
-                style={{ color: "#6EE7D8" }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.color = "#5EEAD4";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.color = "#6EE7D8";
-                }}
+                className="font-semibold transition-colors duration-150 text-[#6EE7D8] hover:text-[#5EEAD4]"
               >
                 Sign up free →
+              </Link>
+            </p>
+
+            <p className="text-center text-sm mt-3" style={{ color: "#7ca8a3" }}>
+              Want a passwordless login?{" "}
+              <Link
+                href="/auth/otp"
+                className="font-semibold transition-colors duration-150 text-[#6EE7D8] hover:text-[#5EEAD4]"
+              >
+                Continue with OTP →
               </Link>
             </p>
           </div>

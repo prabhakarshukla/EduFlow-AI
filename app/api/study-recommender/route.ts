@@ -47,7 +47,9 @@ function sleep(ms: number) {
 // Detects retryable errors: 503 / UNAVAILABLE / overloaded / rate limit
 function isRetryableError(err: unknown): boolean {
   const message =
-    err instanceof Error ? err.message.toLowerCase() : String(err).toLowerCase();
+    err instanceof Error
+      ? err.message.toLowerCase()
+      : String(err).toLowerCase();
 
   return (
     message.includes("503") ||
@@ -87,7 +89,7 @@ async function generateWithRetry(prompt: string): Promise<string> {
 
         console.error(
           `[study-plan] ${model} attempt ${attempt}/${MAX_RETRIES} failed:`,
-          err instanceof Error ? err.message : err
+          err instanceof Error ? err.message : err,
         );
 
         // If this error isn't retryable, bail out of retries for this model
@@ -104,7 +106,7 @@ async function generateWithRetry(prompt: string): Promise<string> {
         // If this was the last model too, give up.
         if (isLastModel) {
           throw new Error(
-            "AI service is temporarily unavailable. Please try again in a moment."
+            "AI service is temporarily unavailable. Please try again in a moment.",
           );
         }
         // Otherwise fall through to try the next (fallback) model.
@@ -113,17 +115,20 @@ async function generateWithRetry(prompt: string): Promise<string> {
   }
 
   // Should not be reachable, but keeps TypeScript happy.
-  throw new Error("AI service is temporarily unavailable. Please try again in a moment.");
+  throw new Error(
+    "AI service is temporarily unavailable. Please try again in a moment.",
+  );
 }
 
 // ─── Route handler ─────────────────────────────────────────────────────────────
 
 export async function POST(req: Request) {
+ 
   try {
     const formData = await req.formData();
 
     const tasks: StudyTask[] = JSON.parse(
-      String(formData.get("tasks") || "[]")
+      String(formData.get("tasks") || "[]"),
     );
 
     const weakSubjects = String(formData.get("weakSubjects") || "");
@@ -133,14 +138,14 @@ export async function POST(req: Request) {
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json(
         { error: "AI service is not configured. Please contact support." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     if (tasks.length === 0) {
       return NextResponse.json(
         { error: "No tasks provided. Please add at least one task." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -218,7 +223,7 @@ Return ONLY valid JSON — no markdown fences, no explanation — matching this 
       console.error("[study-plan] Failed to parse Gemini output:", cleaned);
       return NextResponse.json(
         { error: "AI returned an unexpected format. Please try again." },
-        { status: 502 }
+        { status: 502 },
       );
     }
 
@@ -231,7 +236,7 @@ Return ONLY valid JSON — no markdown fences, no explanation — matching this 
       console.error("[study-plan] Unexpected JSON shape:", json);
       return NextResponse.json(
         { error: "AI returned an unexpected format. Please try again." },
-        { status: 502 }
+        { status: 502 },
       );
     }
 
@@ -240,8 +245,11 @@ Return ONLY valid JSON — no markdown fences, no explanation — matching this 
     // Catch-all — log full details server-side, return generic message to client.
     console.error("[study-plan] Unexpected error:", error);
     return NextResponse.json(
-      { error: "Something went wrong while generating your study plan. Please try again." },
-      { status: 500 }
+      {
+        error:
+          "Something went wrong while generating your study plan. Please try again.",
+      },
+      { status: 500 },
     );
   }
 }

@@ -51,6 +51,10 @@ const agentMap = {
     name: mindmapAgentName,
     runAgent: runMindmapAgent,
   },
+  quiz: {
+    name: quizAgentName,
+    runAgent: runQuizAgent,
+},
 } as const;
 
 function normalizeAgentType(agentType?: AgentType | string) {

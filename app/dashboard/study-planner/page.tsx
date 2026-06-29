@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { marked } from "marked";
 import { supabase } from "../../../lib/supabase";
+import { captureEvent } from "../../../lib/posthog/helpers";
+import { EVENTS } from "../../../lib/posthog/events";
 import {
   formatLastActiveDate,
   getStreak,
@@ -392,6 +394,7 @@ export default function StudyPlannerPage() {
         );
         setError(upErr.message);
       } else if (nextStatus === "done") {
+        captureEvent(EVENTS.TASK_COMPLETED, { priority: current.priority });
         const { data: userData } = await supabase.auth.getUser();
         if (userData.user?.id) {
           const updatedStreak = await updateStreakOnTaskComplete(
@@ -467,6 +470,7 @@ export default function StudyPlannerPage() {
         return;
       }
 
+      captureEvent(EVENTS.TASK_CREATED, { priority: newPriority, has_due_date: !!dueIso });
       await loadTasks();
 
       setNewLabel("");
@@ -492,6 +496,8 @@ export default function StudyPlannerPage() {
       if (delErr) {
         setTasks(prev);
         setError(delErr.message);
+      } else {
+        captureEvent(EVENTS.TASK_DELETED);
       }
     } catch (e) {
       setTasks(prev);
@@ -548,6 +554,7 @@ export default function StudyPlannerPage() {
       }
 
       const plan = data.answer.trim();
+      captureEvent(EVENTS.AI_STUDY_PLAN_GENERATED, { intensity, has_age_grade: !!ageOrGrade.trim(), task_count: tasks.length });
       setGeneratedPlan("");
       setPlanTyping(true);
 

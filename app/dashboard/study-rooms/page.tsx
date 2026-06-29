@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { captureEvent } from "@/lib/posthog/helpers";
+import { EVENTS } from "@/lib/posthog/events";
 
 export default function StudyRoomsPage() {
   const router = useRouter();
@@ -44,6 +46,7 @@ export default function StudyRoomsPage() {
       .single();
 
     if (data) {
+      captureEvent(EVENTS.STUDY_ROOM_CREATED);
       router.push(`/dashboard/study-rooms/${data.id}`);
     }
     setIsCreating(false);
@@ -68,6 +71,7 @@ export default function StudyRoomsPage() {
         room_id: data.id,
         user_id: user.user.id
       }, { onConflict: "room_id, user_id" });
+      captureEvent(EVENTS.STUDY_ROOM_JOINED);
       router.push(`/dashboard/study-rooms/${data.id}`);
     } else {
       alert("Room not found");

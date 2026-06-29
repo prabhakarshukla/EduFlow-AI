@@ -9,6 +9,8 @@ import { marked } from "marked";
 import { RichTextEditor } from "@/components/notes/rich-text-editor";
 import { DrawingCanvas } from "@/components/notes/drawing-canvas";
 import { useFeatureStatus } from "@/hooks/useFeatureStatus";
+import { captureEvent } from "@/lib/posthog/helpers";
+import { EVENTS } from "@/lib/posthog/events";
 
 
 type NoteRow = {
@@ -360,6 +362,7 @@ export default function NotesPage() {
 
       setNotes((ns) => [created, ...ns]);
       setSelectedId(created.id);
+      captureEvent(EVENTS.NOTE_CREATED);
       flashSuccess("Note created.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create note.");
@@ -404,6 +407,7 @@ export default function NotesPage() {
       };
 
       setNotes((ns) => ns.map((n) => (n.id === selectedId ? updated : n)));
+      captureEvent(EVENTS.NOTE_SAVED, { has_subject: !!payload.subject, content_length: payload.content.length, is_pinned: payload.pinned });
       flashSuccess("Saved.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to save note.");
@@ -433,6 +437,7 @@ export default function NotesPage() {
         setError(delErr.message);
         return;
       }
+      captureEvent(EVENTS.NOTE_DELETED);
       flashSuccess("Deleted.");
     } catch (e) {
       setNotes(prev);
@@ -477,6 +482,7 @@ export default function NotesPage() {
         editorRef.current.chain().focus().setImage({ src: urlData.publicUrl }).run();
         setContent(editorRef.current.getHTML());
       }
+      captureEvent(EVENTS.DRAWING_SAVED);
     } catch (err) {
       console.error(err);
       setError("Failed to save drawing.");
@@ -500,6 +506,7 @@ export default function NotesPage() {
         setNotes(prev);
         setError(upErr.message);
       } else {
+        captureEvent(nextPinned ? EVENTS.NOTE_PINNED : EVENTS.NOTE_UNPINNED);
         flashSuccess(nextPinned ? "Pinned." : "Unpinned.");
         await loadNotes();
       }
@@ -558,6 +565,7 @@ export default function NotesPage() {
       }
 
       setAiTyping(false);
+      captureEvent(EVENTS.AI_NOTES_GENERATED, { topic_length: topic.length });
       flashSuccess("AI notes appended. Review and save.");
     } catch (e) {
       const errorMsg =
@@ -652,7 +660,7 @@ export default function NotesPage() {
           </button>
           <button
             type="button"
-            onClick={() => selected && exportNoteToPdf(selected)}
+            onClick={() => { if (selected) { captureEvent(EVENTS.NOTE_EXPORTED_PDF); exportNoteToPdf(selected); } }}
             disabled={!selectedId}
             className="px-4 py-2.5 text-xs font-semibold rounded-xl transition-all duration-150"
             style={{
@@ -688,6 +696,7 @@ export default function NotesPage() {
             type="button"
             onClick={() => {
               if (selectedId) {
+                captureEvent(EVENTS.NOTE_SHARE_LINK_COPIED);
                 copyShareLink(selectedId, flashSuccess).catch((e) => {
                   const msg = e instanceof Error ? e.message : "Failed to copy link.";
                   setError(msg);
@@ -1218,7 +1227,7 @@ export default function NotesPage() {
                     key={selectedId}
                     content={content}
                     onChange={setContent}
-                    onOpenDrawing={() => setIsDrawingOpen(true)}
+                    onOpenDrawing={() => { captureEvent(EVENTS.DRAWING_CANVAS_OPENED); setIsDrawingOpen(true); }}
                     editorRef={editorRef}
                   />
                 </div>

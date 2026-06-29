@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { routeAgent } from "@/lib/ai/agents/agent-router";
 
+
 type MoodLevel = "tired" | "neutral" | "motivated";
 
 const mooddetailss: Record<MoodLevel, string> = {
@@ -10,6 +11,7 @@ const mooddetailss: Record<MoodLevel, string> = {
 };
 
 export async function POST(req: Request) {
+  
   try {
     const body = (await req.json()) as {
       mood?: MoodLevel;

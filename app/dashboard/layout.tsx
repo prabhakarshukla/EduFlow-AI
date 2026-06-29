@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "../../lib/supabase";
+import { identifyUser } from "../../lib/posthog/helpers";
 import FloatingTaskChecklist from "../../components/FloatingTaskChecklist";
 import FloatingChatbot from "../../components/FloatingChatbot";
 
@@ -68,6 +69,11 @@ const sidebarLinks = [
         icon: "M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0 M12 9V5 M12 15v4 M9 12H5 M19 12h-4 M6 6l4.5 4.5 M13.5 13.5L18 18 M18 6l-4.5 4.5 M9.5 13.5L5 18",
       },
       {
+        label: "Focus Mode",
+        href: "/dashboard/focus",
+        icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
+      },
+      {
         label: "Productivity",
         href: "/dashboard/productivity",
         icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
@@ -76,7 +82,17 @@ const sidebarLinks = [
         label: "Mood Tracker",
         href: "/dashboard/mood",
         icon: "M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
-      }
+      },
+      {
+        label: "Quiz",
+        href: "/dashboard/quiz",
+        icon: "M8 10h.01M12 10h.01M16 10h.01M9 16h6M12 3C7.03 3 3 6.582 3 11c0 2.386 1.174 4.528 3 6v4l3.245-1.947A11.94 11.94 0 0012 19c4.97 0 9-3.582 9-8s-4.03-8-9-8z",
+      },
+      {
+        label: "Quiz History",
+        href: "/dashboard/quiz/history",
+        icon: "M12 8v4l3 3"
+      },
     ],
   },
   {
@@ -89,6 +105,7 @@ const sidebarLinks = [
       },
     ],
   },
+  
 ];
 
 const allLinks = sidebarLinks.flatMap((g) => g.items);
@@ -162,6 +179,8 @@ export default function DashboardLayout({
     if (!authReady || !user) return;
     if (lastProfileSyncUserId.current === user.id) return;
     lastProfileSyncUserId.current = user.id;
+
+    identifyUser(user.id, { email: user.email });
 
     const fullName = resolveDisplayName(user);
     const avatarUrl =

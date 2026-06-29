@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { captureEvent } from "@/lib/posthog/helpers";
+import { EVENTS } from "@/lib/posthog/events";
 import { FormattedNote } from "@/components/notes/formatted-note";
 
 type ChatSession = {
@@ -178,6 +180,7 @@ export default function ChatbotPage() {
         return;
       }
 
+      captureEvent(EVENTS.CHAT_SESSION_CREATED);
       setSessions((prev) => [data, ...prev]);
       setActiveSessionId(data.id);
     } catch (e) {
@@ -201,6 +204,7 @@ export default function ChatbotPage() {
         return;
       }
 
+      captureEvent(EVENTS.CHAT_SESSION_DELETED);
       setSessions((prev) => prev.filter((s) => s.id !== id));
       if (activeSessionId === id) {
         const remaining = sessions.filter((s) => s.id !== id);
@@ -237,6 +241,7 @@ export default function ChatbotPage() {
         return;
       }
 
+      captureEvent(EVENTS.CHAT_SESSION_RENAMED);
       setSessions((prev) =>
         prev.map((s) => (s.id === id ? { ...s, title: trimmedTitle } : s))
       );
@@ -325,6 +330,7 @@ export default function ChatbotPage() {
         throw new Error(data.error || "Failed to process chat response.");
       }
 
+      captureEvent(EVENTS.CHAT_MESSAGE_SENT);
       if (data.answer) {
         const aiMsg: ChatMessage = {
           id: Math.random().toString(),

@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../../../lib/supabase";
 import { useFeatureStatus } from "@/hooks/useFeatureStatus";
+import { captureEvent } from "@/lib/posthog/helpers";
+import { EVENTS } from "@/lib/posthog/events";
 
 type SessionRow = {
   id: string;
@@ -269,6 +271,7 @@ export default function ProductivityPage() {
         return;
       }
 
+      captureEvent(EVENTS.STUDY_SESSION_LOGGED, { subject: cleanSubject, duration_minutes: Math.round(cleanDuration) });
       setSubject("");
       setDurationMinutes("");
       setSessionDate(getLocalIsoDate());
@@ -293,6 +296,8 @@ export default function ProductivityPage() {
       if (delErr) {
         setSessions(prev);
         setError(delErr.message);
+      } else {
+        captureEvent(EVENTS.STUDY_SESSION_DELETED);
       }
     } catch (e) {
       setSessions(prev);
@@ -363,6 +368,7 @@ export default function ProductivityPage() {
       }
 
       const insights = data.answer.trim();
+      captureEvent(EVENTS.AI_PRODUCTIVITY_INSIGHTS_REFRESHED);
       localStorage.setItem("productivity_insights_cache", insights);
       localStorage.setItem("productivity_insights_state_key", dataStateKey);
 

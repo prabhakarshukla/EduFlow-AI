@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useTheme } from "@/hooks/useTheme";
+import { captureEvent } from "@/lib/posthog/helpers";
+import { EVENTS } from "@/lib/posthog/events";
 
 function Card({
   children,
@@ -175,6 +177,7 @@ export default function SettingsPage() {
           : await Notification.requestPermission();
 
       if (permission === "granted") {
+        captureEvent(EVENTS.NOTIFICATION_PERMISSION_GRANTED);
         setNotificationsEnabled(true);
         setNotificationPermissionStatus("enabled");
         setNotificationStatusMessage(null);
@@ -399,7 +402,7 @@ export default function SettingsPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setTheme(isDark ? "light" : "dark")}
+                  onClick={() => { const next = isDark ? "light" : "dark"; captureEvent(EVENTS.THEME_CHANGED, { theme: next }); setTheme(next); }}
                   className="relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200"
                   style={{
                     background: isDark ? "#14b8a6" : "var(--ui-border)",
@@ -503,7 +506,7 @@ export default function SettingsPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setRemindersEnabled(!remindersEnabled)}
+                  onClick={() => { captureEvent(EVENTS.REMINDERS_TOGGLED, { enabled: !remindersEnabled }); setRemindersEnabled(!remindersEnabled); }}
                   className="relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-200"
                   style={{
                     background: remindersEnabled

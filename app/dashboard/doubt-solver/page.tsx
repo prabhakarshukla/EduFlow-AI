@@ -1,6 +1,8 @@
 'use client';
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { captureEvent } from '@/lib/posthog/helpers';
+import { EVENTS } from '@/lib/posthog/events';
 import { FormattedNote } from '@/components/notes/formatted-note';
 import { useFeatureStatus } from '@/hooks/useFeatureStatus';
 
@@ -69,6 +71,7 @@ export default function DoubtSolverPage() {
     setError(null);
     setResult(null);
     setDisplayedAnswer('Thinking...');
+    captureEvent(EVENTS.DOUBT_SUBMITTED, { question_length: q.length });
 
     try {
       const res = await fetch('/api/doubt-solver', {
@@ -83,8 +86,10 @@ export default function DoubtSolverPage() {
       if (!data.answer || !data.answer.trim()) throw new Error('AI returned an empty answer.');
 
       setResult({ answer: data.answer.trim(), source: data.source || 'ai' });
+      captureEvent(EVENTS.DOUBT_ANSWERED, { success: true });
       setStatus('success');
     } catch (err) {
+      captureEvent(EVENTS.DOUBT_SOLVER_ERROR, { error: err instanceof Error ? err.message : 'unknown' });
       setStatus('error');
       setError(err instanceof Error ? err.message : 'Something went wrong while processing your question.');
     }

@@ -1,16 +1,21 @@
 import { NextResponse } from "next/server";
 import { routeAgent } from "@/lib/ai/agents/agent-router";
 
+
 function parseCleanJson(text: string) {
   let cleaned = text.trim();
   // Strip code blocks if they are returned by the LLM
   if (cleaned.startsWith("```")) {
-    cleaned = cleaned.replace(/^```(?:json)?/, "").replace(/```$/, "").trim();
+    cleaned = cleaned
+      .replace(/^```(?:json)?/, "")
+      .replace(/```$/, "")
+      .trim();
   }
   return JSON.parse(cleaned);
 }
 
 export async function POST(req: Request) {
+  
   try {
     const { topic } = await req.json();
 
@@ -46,9 +51,16 @@ export async function POST(req: Request) {
       const parsedData = parseCleanJson(rawOutput);
       return NextResponse.json(parsedData);
     } catch (parseError) {
-      console.error("[mindmap-generator] Failed to parse AI JSON response:", rawOutput, parseError);
+      console.error(
+        "[mindmap-generator] Failed to parse AI JSON response:",
+        rawOutput,
+        parseError,
+      );
       return NextResponse.json(
-        { error: "AI returned invalid JSON. Please try again.", rawResponse: rawOutput },
+        {
+          error: "AI returned invalid JSON. Please try again.",
+          rawResponse: rawOutput,
+        },
         { status: 500 },
       );
     }
