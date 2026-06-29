@@ -7,7 +7,7 @@ import { agentName as moodAgentName, runAgent as runMoodAgent } from "./mood-age
 import { agentName as timetableAgentName, runAgent as runTimetableAgent } from "./timetable-agent";
 import { agentName as recommendationAgentName, runAgent as runRecommendationAgent } from "./recommendation-agent";
 import { agentName as mindmapAgentName, runAgent as runMindmapAgent } from "./mindmap-agent";
-
+import {agentName as flashcardAgentName,runAgent as runFlashcardAgent,} from "./flashcard-agent";
 export type AgentRouterInput = {
   agentType?: AgentType | string;
   userMessage: string;
@@ -26,6 +26,10 @@ const agentMap = {
   notes: {
     name: notesAgentName,
     runAgent: runNotesAgent,
+  },
+  flashcard: {
+  name: flashcardAgentName,
+  runAgent: runFlashcardAgent,
   },
   productivity: {
     name: productivityAgentName,
