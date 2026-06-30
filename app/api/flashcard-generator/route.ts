@@ -1,6 +1,30 @@
 import { NextResponse } from "next/server";
 import { routeAgent } from "@/lib/ai/agents/agent-router";
 
+type FlashcardResponse = {
+  flashcards?: {
+    question: string;
+    answer: string;
+  }[];
+};
+
+async function generateFlashcards(content: string) {
+  const result = await routeAgent({
+    agentType: "flashcard",
+    userMessage: `Generate flashcards from this study material:\n\n${content}`,
+    context: {
+      source: "flashcard-generator",
+    },
+  });
+
+  const cleaned = result
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+
+  return JSON.parse(cleaned) as FlashcardResponse;
+}
+
 export async function POST(req: Request) {
   try {
     const { content } = await req.json();
@@ -12,24 +36,26 @@ export async function POST(req: Request) {
       );
     }
 
-    const result = await routeAgent({
-      agentType: "flashcard",
-      userMessage: `Generate flashcards from this study material:\n\n${content}`,
-      context: {
-        source: "flashcard-generator",
-      },
-    });
+    let parsed: FlashcardResponse | null = null;
 
-    const cleaned = result
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        parsed = await generateFlashcards(content);
 
-    const parsed = JSON.parse(cleaned);
+        if (Array.isArray(parsed.flashcards)) {
+          break;
+        }
+      } catch (error) {
+        console.error(
+          `[flashcard-generator] attempt ${attempt} failed:`,
+          error
+        );
+      }
+    }
 
     if (!parsed || !Array.isArray(parsed.flashcards)) {
       return NextResponse.json(
-        { error: "Invalid flashcard format returned by AI" },
+        { error: "Internal Error occured" },
         { status: 500 }
       );
     }
@@ -38,13 +64,10 @@ export async function POST(req: Request) {
       flashcards: parsed.flashcards,
     });
   } catch (error) {
+    console.error("[flashcard-generator] request failed:", error);
+
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to generate flashcards",
-      },
+      { error: "Internal Error occured" },
       { status: 500 }
     );
   }
