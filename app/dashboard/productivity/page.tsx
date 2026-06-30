@@ -363,6 +363,69 @@ const monthlySummary = {
   hours: +(monthlyMinutes / 60).toFixed(1),
 };
 
+const uniqueStudyDates = [
+  ...new Set(sessions.map((session) => session.session_date)),
+].sort();
+
+let longestStreak = 0;
+let currentStreak = 0;
+
+if (uniqueStudyDates.length > 0) {
+  let streak = 1;
+
+  for (let i = 1; i < uniqueStudyDates.length; i++) {
+    const prev = new Date(uniqueStudyDates[i - 1]);
+    const curr = new Date(uniqueStudyDates[i]);
+
+    const diff =
+      (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (diff === 1) {
+      streak++;
+    } else {
+      longestStreak = Math.max(longestStreak, streak);
+      streak = 1;
+    }
+  }
+
+  longestStreak = Math.max(longestStreak, streak);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const lastStudy = new Date(
+    uniqueStudyDates[uniqueStudyDates.length - 1]
+  );
+  lastStudy.setHours(0, 0, 0, 0);
+
+  const daysSinceLastStudy =
+    (today.getTime() - lastStudy.getTime()) /
+    (1000 * 60 * 60 * 24);
+
+  if (daysSinceLastStudy <= 1) {
+    currentStreak = 1;
+
+    for (
+      let i = uniqueStudyDates.length - 1;
+      i > 0;
+      i--
+    ) {
+      const curr = new Date(uniqueStudyDates[i]);
+      const prev = new Date(uniqueStudyDates[i - 1]);
+
+      const diff =
+        (curr.getTime() - prev.getTime()) /
+        (1000 * 60 * 60 * 24);
+
+      if (diff === 1) {
+        currentStreak++;
+      } else {
+        break;
+      }
+    }
+  }
+}
+
 return {
   totalMinutes,
   totalHours,
@@ -377,6 +440,8 @@ return {
   weeklySummary,
   monthlySummary,
   subjectBreakdown,
+  currentStreak,
+  longestStreak,
 };
   }, [sessions,taskStats]);
 
@@ -709,6 +774,38 @@ return {
     style={{ color: "var(--ui-muted)" }}
   >
     {stats.monthlySummary.sessions} sessions
+  </p>
+</Card>
+
+  <Card className="p-4">
+  <p
+    className="text-xs"
+    style={{ color: "var(--ui-muted)" }}
+  >
+    Current Streak
+  </p>
+
+  <p
+    className="text-2xl font-bold mt-2"
+    style={{ color: "var(--ui-heading)" }}
+  >
+    🔥 {stats.currentStreak} Day{stats.currentStreak !== 1 ? "s" : ""}
+  </p>
+</Card>
+
+<Card className="p-4">
+  <p
+    className="text-xs"
+    style={{ color: "var(--ui-muted)" }}
+  >
+    Longest Streak
+  </p>
+
+  <p
+    className="text-2xl font-bold mt-2"
+    style={{ color: "var(--ui-heading)" }}
+  >
+    🏆 {stats.longestStreak} Day{stats.longestStreak !== 1 ? "s" : ""}
   </p>
 </Card>
 
