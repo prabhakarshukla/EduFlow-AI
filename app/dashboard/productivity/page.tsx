@@ -789,7 +789,7 @@ return {
     className="text-2xl font-bold mt-2"
     style={{ color: "var(--ui-heading)" }}
   >
-    🔥 {stats.currentStreak} Day{stats.currentStreak !== 1 ? "s" : ""}
+<span aria-hidden="true">🔥</span> {stats.currentStreak} Day{stats.currentStreak !== 1 ? "s" : ""}
   </p>
 </Card>
 
