@@ -11,6 +11,9 @@ import { DrawingCanvas } from "@/components/notes/drawing-canvas";
 import { useFeatureStatus } from "@/hooks/useFeatureStatus";
 import { captureEvent } from "@/lib/posthog/helpers";
 import { EVENTS } from "@/lib/posthog/events";
+import { useSseStream } from "@/hooks/use-sse-stream";
+import { SseStreamRenderer } from "@/components/ui/sse-stream-renderer";
+import { useCallback, useState, useEffect } from "react";
 
 
 type NoteRow = {
@@ -513,6 +516,56 @@ export default function NotesPage() {
     } catch (e) {
       setNotes(prev);
       setError(e instanceof Error ? e.message : "Failed to update note.");
+    }
+  };
+
+  const [streamContent, setStreamContent] = useState("");
+  const [showStreamPanel, setShowStreamPanel] = useState(false);
+
+  const handleStreamChunk = useCallback((chunk: string) => {
+    setStreamContent((prev) => prev + chunk);
+  }, []);
+
+  const handleStreamComplete = useCallback((fullText: string) => {
+    // Optional: Add to editor on complete
+    console.log("Stream complete, length:", fullText.length);
+  }, []);
+
+  const handleStreamError = useCallback((error: string) => {
+    setAiError(error);
+    setAiLoading(false);
+    setAiTyping(false);
+  }, []);
+
+  const { startStream, isStreaming, error: streamError } = useSseStream({
+    endpoint: "/api/notes-generator/stream",
+    onChunk: handleStreamChunk,
+    onComplete: handleStreamComplete,
+    onError: handleStreamError,
+  });
+
+  const generateWithAiStreaming = async () => {
+    if (!selectedId) {
+      setAiError("Select or create a note first.");
+      return;
+    }
+    const topic = aiTopic.trim();
+    if (!topic) {
+      setAiError("Enter a topic to generate notes.");
+      return;
+    }
+
+    setAiError(null);
+    setAiLoading(true);
+    setAiTyping(false);
+    setStreamContent("");
+    setShowStreamPanel(true);
+    
+    try {
+      await startStream({ topic, agentType: "notes", context: { source: "notes-generator", topic } });
+      setAiLoading(false);
+    } catch (error) {
+      // Error is handled by the hook
     }
   };
 
@@ -1079,16 +1132,16 @@ export default function NotesPage() {
                   />
                   <button
                     type="button"
-                    onClick={generateWithAi}
-                    disabled={!selectedId || aiLoading || aiTyping || !aiTopic.trim() || !isAiActive}
+                    onClick={isStreaming ? undefined : generateWithAiStreaming}
+                    disabled={!selectedId || aiLoading || aiTyping || !aiTopic.trim() || !isAiActive || isStreaming}
                     className="btn-primary justify-center text-xs px-4 py-2.5 whitespace-nowrap"
                     style={{
                       opacity:
-                        !selectedId || aiLoading || aiTyping || !aiTopic.trim() || !isAiActive
+                        !selectedId || aiLoading || aiTyping || !aiTopic.trim() || !isAiActive || isStreaming
                           ? 0.5
                           : 1,
                       cursor:
-                        !selectedId || aiLoading || aiTyping || !aiTopic.trim() || !isAiActive
+                        !selectedId || aiLoading || aiTyping || !aiTopic.trim() || !isAiActive || isStreaming
                           ? "not-allowed"
                           : "pointer",
                     }}
@@ -1097,7 +1150,9 @@ export default function NotesPage() {
                       ? "Thinking..."
                       : aiTyping
                         ? "Writing notes..."
-                        : "Generate with AI"}
+                        : isStreaming
+                          ? "Streaming..."
+                          : "Generate with AI"}
                   </button>
                 </div>
                 {!featureLoading && !isAiActive && (
@@ -1125,6 +1180,20 @@ export default function NotesPage() {
                     ))}
                   </div>
                 )}
+                {isStreaming && (
+                  <div
+                    className="rounded-xl p-3 space-y-2"
+                    style={{
+                      background: "rgba(110,231,216,0.06)",
+                      border: "1px solid rgba(110,231,216,0.16)",
+                    }}
+                  >
+                    <p className="text-xs font-semibold" style={{ color: "#0f766e" }}>
+                      Streaming AI notes...
+                    </p>
+                    <div className="h-2.5 rounded-lg animate-pulse" style={{ width: "100%", background: "rgba(110,231,216,0.18)" }} />
+                  </div>
+                )}
                 {aiTyping && (
                   <p className="text-[11px]" style={{ color: "var(--ui-muted)" }}>
                     Writing the generated notes into your editor...
@@ -1144,6 +1213,61 @@ export default function NotesPage() {
                   </div>
                 )}
               </div>
+
+              {showStreamPanel && streamContent && (
+                <div className="rounded-xl p-4 space-y-2 mb-4" style={{ 
+                  background: "rgba(110,231,216,0.04)", 
+                  border: "1px solid rgba(110,231,216,0.14)" 
+                }}>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--ui-muted)" }}>
+                      Live Stream Preview
+                    </p>
+                    {isStreaming && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-teal-500/10 text-teal-400">
+                        <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+                        Streaming
+                      </span>
+                    )}
+                  </div>
+                  <SseStreamRenderer content={streamContent} isStreaming={isStreaming} />
+                  {isStreaming && (
+                    <p className="text-[11px] text-sky-400 mt-2">
+                      Copy completed output and click &quot;Add to Editor&quot;
+                    </p>
+                  )}
+                </div>
+              )}
+              
+              {streamContent && !isStreaming && (
+                <div className="flex gap-2 mb-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (editorRef.current) {
+                        const htmlContent = marked.parse(streamContent);
+                        editorRef.current.chain().focus().insertContent(`<br><hr><br><h3>AI Generated Content:</h3>${htmlContent}`).run();
+                        setContent(editorRef.current.getHTML());
+                        flashSuccess("Streamed content added to editor.");
+                      }
+                    }}
+                    className="btn-primary justify-center text-xs px-4 py-2.5"
+                  >
+                    Add to Editor
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStreamContent("");
+                      setShowStreamPanel(false);
+                    }}
+                    className="px-4 py-2.5 text-xs font-semibold rounded-xl"
+                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid var(--ui-border)", color: "var(--ui-text)" }}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              )}
 
               <div className="grid sm:grid-cols-3 gap-3">
                 <div className="sm:col-span-2">
