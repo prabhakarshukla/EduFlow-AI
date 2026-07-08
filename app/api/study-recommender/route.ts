@@ -152,49 +152,53 @@ export async function POST(req: Request) {
     // ── Build prompt ───────────────────────────────────────────────────────────
     const today = new Date().toISOString().split("T")[0];
 
-    const prompt = `
-You are EduFlow AI Study Planner.
+const prompt = `You are the EduFlow AI algorithmic Study Planner. Your objective is to build a mathematically optimized, realistic 7-day study schedule starting from ${today}.
 
-Today's date: ${today}
+[DATA INPUTS]
+Today's Reference Date: ${today}
 
-Generate a personalized 7-day study plan for a student.
-
-Rules:
-- Prioritize subjects with the nearest deadlines.
-- Give extra daily slots to subjects listed as weak.
-- Schedule each slot as exactly 1 hour, starting from 09:00.
-- Do NOT schedule more than the reasonable number of slots per day.
-- Keep recommendations concise and actionable (max 12 words).
-- Keep summary under 20 words.
-
-Tasks:
+Current Tasks & Deadlines:
 ${JSON.stringify(tasks, null, 2)}
 
-Weak Subjects:
-${weakSubjects || "None specified"}
+Student's Weak Subjects (Priority allocation required):
+${JSON.stringify(weakSubjects || [], null, 2)}
 
-Syllabus Content:
+Available Syllabus Context:
 ${syllabusText ? syllabusText.slice(0, 3000) : "Not provided"}
 
-Return ONLY valid JSON — no markdown fences, no explanation — matching this exact shape:
+[SCHEDULING ALGORITHM & CONSTRAINT RULES]
+1. Chronological Priority: Prioritize subjects with the nearest upcoming deadlines from ${today}.
+2. Weakness Loading: Dynamically allocate double the daily time slots to "Weak Subjects" compared to strong subjects, until deadlines are mitigated.
+3. Hard Cap Constraints: Schedule exactly 4 blocks per day. Block 1 starts at 09:00. Each slot must be exactly 1 hour (e.g., "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00", "12:00 - 13:00"). Do not skip hours within a day's schedule.
+4. Actionable Content: The "recommendation" string inside each slot must map a specific task or syllabus sub-topic to that hour. 
+5. Strict Length Constraints: 
+   - Every individual recommendation string must be maximum 12 words.
+   - The overall blueprint "summary" must be maximum 20 words.
+
+[OUTPUT SPECIFICATION]
+Return ONLY a raw, valid JSON object matching the exact schema below. Do NOT wrap the output in markdown code blocks (such as \`\`\`json), backticks, or prepend/append any text conversational chatter. The response must start strictly with '{' and end strictly with '}'.
 
 {
-  "summary": "string",
-  "recommendations": ["string", "string", "string"],
+  "summary": "String (Max 20 words overview of the weekly strategy)",
+  "recommendations": [
+    "String (High-level actionable rule 1, max 12 words)",
+    "String (High-level actionable rule 2, max 12 words)",
+    "String (High-level actionable rule 3, max 12 words)"
+  ],
   "timetable": [
     {
       "date": "YYYY-MM-DD",
       "slots": [
         {
-          "time": "HH:MM – HH:MM",
-          "subject": "string",
-          "recommendation": "string"
+          "time": "HH:MM - HH:MM",
+          "subject": "String (Subject Name matching the task or syllabus entry)",
+          "recommendation": "String (Micro-target for this specific hour, max 12 words)"
         }
       ]
     }
   ]
-}
-`;
+}`
+;
 
     // ── Call Gemini (with retries + fallback model) ────────────────────────────
     let rawText: string;
