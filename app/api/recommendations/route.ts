@@ -320,10 +320,16 @@ export async function POST(req: Request) {
 
     // ---------- Call recommendation agent ----------
     const userMessage =
-      "Based on all the student data below, generate 3-5 personalized, actionable study recommendations. " +
-      "Return ONLY a JSON array (no markdown fences). " +
-      "Use specific numbers, task names, and dates from the provided context.";
+      "You are a data-driven academic strategist. Analyze the student data provided in the context and generate 3-5 hyper-personalized, actionable study recommendations.\n\n" +
 
+      "[STRICT DATA CONSTRAINTS]\n" +
+      "- Every recommendation must explicitly reference exact data points from the context: specific scores, task names, module numbers, or upcoming deadlines.\n" +
+      "- Do not invent placeholder dates or generalized advice (e.g., instead of 'Study more,' use 'Dedicate 30 mins to Module 3 Quiz by Oct 14 to pull up your 65% score').\n\n" +
+
+      "[OUTPUT FORMAT]\n" +
+      "Return ONLY a raw, valid JSON array. Do NOT wrap the response in markdown code blocks, backticks (```), or text explanations. The response must start with '[' and end with ']'."
+    ;
+  
     const aiResponse = await routeAgent({
       agentType: "recommendation",
       userMessage,
