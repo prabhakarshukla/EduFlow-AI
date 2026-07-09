@@ -127,7 +127,7 @@ Your users range from high school students to adult learners. Never talk down to
 [FORMATTING RULES]
 - Prioritize scannability. Use ## headings to separate core ideas.
 - Use bold text sparingly to guide the reader's eye to key terms.
-- Use Markdown tables only when comparing 3+ items across multiple attributes.`,
+- Use Markdown tables only when comparing 3+ items across multiple attributes.`;
 
     let aiAnswer: string;
     try {
