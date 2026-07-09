@@ -1,42 +1,44 @@
-# EduFlow AI
+<div align="center">
+  
+  # 🎓 EduFlow AI
+  
+  ### AI-powered student productivity assistant
+  
+  EduFlow AI is a full-stack student assistant SaaS that brings **study planning, notes, productivity tracking, mood support, and AI learning tools into one clean dashboard**. It helps students stay organized, build consistent daily study streaks, and study collaboratively in real-time.
 
-**AI-powered student productivity assistant**
-
-EduFlow AI is a full-stack student assistant SaaS that brings study planning, notes, productivity tracking, mood support, and AI learning tools into one clean dashboard. It helps students stay organized, build consistent daily study streaks, and study collaboratively in real-time.
-
-<p align="center">
+  <br>
+  
   <img src="./public/images/logo.png" alt="EduFlow AI Logo" width="160"/>
-</p>
+
+</div>
 
 ---
 
-##  Overview
+## 🎯 Overview
 
-Students often use too many separate tools for planning, notes, doubts, focus tracking, and motivation. EduFlow AI was built to solve that problem by combining the most useful student workflows in one place.
+> ### Students often use too many separate tools for planning, notes, doubts, focus tracking, and motivation, leaving them unoriganized. EduFlow AI was built to solve that problem by combining the most useful student workflows in one place.
 
-With EduFlow AI, students can manage study tasks, create and organize notes, ask AI-powered academic questions, track productivity, monitor mood, build daily study streaks, collaborate in real-time study rooms, manage weekly timetables, and view weekly progress — all from a single dashboard.
+With EduFlow AI, students can **manage study tasks, create and organize notes, ask AI-powered academic questions, track productivity, monitor mood, build daily study streaks, collaborate in real-time study rooms, manage weekly timetables, and view weekly progress** — all from a **single dashboard.**
 
-The goal is simple: help students stay organized, consistent, and supported while studying.
+The goal is simple: **to help students stay organized, consistent, and supported while studying.**
 
 ---
 
-##  Features
+## 🧩 Features
 
 ### Study & Planning
 
 - Study Planner with full CRUD support
 - Task completion tracking with priority levels (High, Medium, Low)
 - Notifications and reminders for due tasks
-- Daily streak tracking with animations and badges
-- Weekly Progress Graph for completed study tasks
+- Daily streak tracking with animations and badges + Weekly Progress Graph for completed study tasks
 - Floating Task Checklist widget for quick task access
 
 ### Notes
 
 - Notes CRUD with organized note management
 - AI Notes Generator for prompt-based study notes
-- Rich text editing with formatting tools
-- Drawing and annotation support
+- Rich Text editing with Formatting tools, Drawing and Annotation support
 - Export notes as PDF
 - Shareable notes links
 
@@ -47,9 +49,10 @@ The goal is simple: help students stay organized, consistent, and supported whil
 - Intelligent review scheduling for long-term memory retention
 
 ### AI recommendation Features
+
 - Generates a personalized 7-day study timetable based on subjects, deadlines, and priorities.
 - Combines rule-based logic (urgent deadlines first) with AI for smarter recommendations.
-- Lets users add weak subjects and paste syllabus text for more tailored plans.
+- Allows users to add weak subjects and paste syllabus text for more tailored plans.
 - Automatically retries if the AI service is briefly down, with a backup model as a safety net.
 
 ### AI Learning Tools
@@ -71,15 +74,14 @@ The goal is simple: help students stay organized, consistent, and supported whil
 
 ### Collaborative Study Rooms
 
-- Real-time study rooms joinable via room ID
+- Real-time study rooms joinable via room ID + Interactive room chat
 - Synchronized focus timer shared across members
 - Collaborative shared notes pad
-- Interactive room chat
 - Active member directory
 
 ### Weekly Timetable
 
-- Structured class timetable with Grid and List views
+- Structured Class Timetable with Grid and List views
 - AI Schedule Parser to auto-populate timetable from plain text
 - Color-coded subject slots with teacher and location info
 - Supabase sync with local storage fallback
@@ -92,19 +94,19 @@ The goal is simple: help students stay organized, consistent, and supported whil
 
 ---
 
-##  AI Capabilities
+##  🧠 AI Capabilities
 
 EduFlow AI uses AI APIs through Google Gemini / LLM providers to make studying more interactive and helpful.
 
-### AI Doubt Solver
+### 💬 AI Doubt Solver
 
 Students can ask academic questions and receive clear, AI-generated explanations. This helps reduce friction when they get stuck while studying.
 
-### AI Notes Generator
+### 📝 AI Notes Generator
 
 Students can generate structured study notes from prompts, topics, or learning goals. This makes it easier to start studying without staring at a blank page.
 
-### AI Recommendations
+### ✅ AI Recommendations
 
 The recommendation engine analyzes study patterns, mood data, and task completion to suggest personalized study strategies such as break suggestions, streak protection alerts, and optimal study times.
 
@@ -122,36 +124,88 @@ The project includes a multi-agent AI approach, allowing different AI workflows 
 
 ---
 
-##  Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend
 
-- Next.js
-- TypeScript
-- Tailwind CSS
-- React
+<table>
+  <tr>
+    <td>Next.js</td>
+    <td><img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js"></td>
+  </tr>
+  <tr>
+    <td>TypeScript</td>
+    <td><img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></td>
+  </tr>
+  <tr>
+    <td>Tailwind CSS</td>
+    <td><img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"></td>
+  </tr>
+  <tr>
+    <td>React</td>
+    <td><img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"></td>
+  </tr>
+</table>
 
 ### Backend & Database
 
-- Supabase Auth
-- Supabase Database
-- Row Level Security policies
+<table>
+  <tr>
+    <td>Supabase Auth</td>
+    <td><img src="https://img.shields.io/badge/Supabase_Auth-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase Auth"></td>
+  </tr>
+  <tr>
+    <td>Supabase Database</td>
+    <td><img src="https://img.shields.io/badge/Supabase_Database-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase Database"></td>
+  </tr>
+  <tr>
+    <td>Row Level Security policies</td>
+    <td></td>
+  </tr>
+</table>
 
 ### AI & APIs
 
-- Google Gemini API
-- AI-powered notes generation
-- AI-powered doubt solving
+<table>
+  <tr>
+    <td>Google Gemini API</td>
+    <td><img src="https://img.shields.io/badge/Google_Gemini-8E75C2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Google Gemini API"></td>
+  </tr>
+  <tr>
+    <td>AI-powered notes generation</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>AI-powered doubt solving</td>
+    <td></td>
+  </tr>
+</table>
 
 ### Analytics
 
-- PostHog — product analytics, event tracking, and error monitoring
+<table>
+  <tr>
+    <td>PostHog — product analytics, event tracking, and error monitoring</td>
+    <td><img src="https://img.shields.io/badge/PostHog-000000?style=for-the-badge&logo=posthog&logoColor=white" alt="PostHog"></td>
+  </tr>
+</table>
 
 ### Utilities
 
-- PDF export
-- Notifications and reminders
-- Responsive dashboard UI
+<table>
+  <tr>
+    <td>PDF export</td>
+    <td><img src="https://img.shields.io/badge/Adobe-red?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="Adobe"></td>
+  </tr>
+  <tr>
+    <td>Notifications and reminders</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Responsive dashboard UI</td>
+    <td></td>
+  </tr>
+</table>
 
 ---
 
@@ -188,8 +242,10 @@ The project includes a multi-agent AI approach, allowing different AI workflows 
 ![Timetable Screenshot](./public/images/weekly-timetable.png)
 
 ---
-## discord channel 
-https://discord.gg/NbbqfpdPeK
+
+## 👾 Discord Channel 
+
+### https://discord.gg/NbbqfpdPeK
 
 ---
 
@@ -231,7 +287,7 @@ RESEND_FROM_EMAIL=
 
 Add your Supabase project URL, Supabase anon key, and AI API key. EduFlow AI uses Gemini when `AI_PROVIDER=gemini`, and can fall back to the OpenRouter/OpenAI-compatible key 
 
-### 4. Run the development server
+### 4. ,🚀 Run the development server
 
 ```bash
 npm run dev
@@ -249,7 +305,9 @@ Open the app in your browser:
 npm run build
 ```
 
-## Environment Variables
+---
+
+## >_ Environment Variables
 
 EduFlow AI separates its environment variables into core required variables (needed for the database and authentication) and optional variables (needed for AI features or email notifications). 
 
@@ -271,37 +329,37 @@ EduFlow AI separates its environment variables into core required variables (nee
 
 ---
 
-##  Key Features Highlight
+##  ✨ Key Features Highlight
 
-### Streak System
+### ⚡ Streak System
 
 EduFlow AI tracks daily study consistency based on completed study tasks. The dashboard includes animated streak UI, milestone badges, longest streak tracking, and last active date display.
 
-### Weekly Progress Graph
+### 🗓️ Weekly Progress Graph
 
 The dashboard shows a clean 7-day bar chart based on completed study tasks. This helps students quickly understand their study momentum across the week.
 
-### AI Integration
+### 🤖 AI Integration
 
 AI tools are built directly into the study workflow, so students can generate notes, solve doubts, and get help without leaving the app.
 
 ---
 
-##  Challenges I Faced
+## ⚔️ Challenges I Faced During Development
 
-Building EduFlow AI involved several real-world challenges:
+**Building EduFlow AI involved several real-world challenges:**
 
-- Handling async state across multiple dashboard widgets in Next.js
-- Keeping the dashboard responsive while showing a lot of useful data
-- Fixing TypeScript and production build issues while adding new features
-- Integrating AI APIs in a reliable and user-friendly way
-- Understanding and configuring Supabase Auth, database queries, and RLS policies
-- Managing many features together without breaking existing workflows
-- Designing a clean UI that feels premium but still practical for daily student use
+- Handling async state across multiple dashboard widgets in Next.js.
+- Keeping the dashboard responsive while showing a lot of useful data.
+- Fixing TypeScript and production build issues while adding new features.
+- Integrating AI APIs in a reliable and user-friendly way.
+- Understanding and configuring Supabase Auth, database queries, and RLS policies.
+- Managing many features together without breaking existing workflows.
+- Designing a clean UI that feels premium but still practical and accessible for daily student use.
 
 ---
 
-##  Future Improvements
+## 🔮 Future Improvements
 
 - Heatmap calendar for long-term study consistency
 - Advanced AI study insights
@@ -312,15 +370,18 @@ Building EduFlow AI involved several real-world challenges:
 
 ---
 
-##  Contributing
+## 🤝 Contributing
 
-Contributions are welcome.
+**Contributions are always welcome!**
 
-If you would like to improve EduFlow AI:
+If you would like to improve EduFlow AI, follow these steps:
 
 1. Fork the repository
+
 2. Create a new feature branch
+
 3. Make your changes
+
 4. Submit a pull request
 
 Please keep changes clean, focused, and easy to review.
@@ -353,15 +414,15 @@ Thanks to all the amazing people who contribute to **EduFlow-AI** 🚀
 
 ---
 
-##  License
+## ⚖️ License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. View the License file [here](https://github.com/prabhakarshukla/EduFlow-AI/blob/main/LICENSE)
 
 ---
 
-##  Acknowledgements
+## 🙌 Acknowledgements
 
-Thanks to the tools and platforms that make this project possible:
+**Huge thanks to all the tools and platforms that make this project possible:**
 
 - Next.js
 - Supabase
@@ -373,9 +434,9 @@ Thanks to the tools and platforms that make this project possible:
 
 ---
 
-##  Contact
+## ✉️ Contact
 
-- GitHub: https://github.com/prabhakarshukla
-- LinkedIn: www.linkedin.com/in/prabhakar-shukla-90334b399
-- Instagram: https://www.instagram.com/prabhakar_.shukla
-- Gmail: prabhakarshukla669@gmail.com
+- **GitHub**: https://github.com/prabhakarshukla
+- **LinkedIn**: www.linkedin.com/in/prabhakar-shukla-90334b399
+- **Instagram**: https://www.instagram.com/prabhakar_.shukla
+- **Gmail**: prabhakarshukla669@gmail.com
