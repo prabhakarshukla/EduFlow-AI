@@ -31,6 +31,21 @@ function getAuthErrorMessage(message: string) {
   return message;
 }
 
+async function readJsonSafe(res: Response): Promise<{ error?: string; [k: string]: unknown }> {
+  const text = await res.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text) as { error?: string; [k: string]: unknown };
+  } catch {
+    const looksLikeHtml = text.trimStart().startsWith("<");
+    return {
+      error: looksLikeHtml
+        ? "Cannot reach the signup service. Please try again in a moment."
+        : "Signup failed. Please try again later.",
+    };
+  }
+}
+
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -64,10 +79,11 @@ export default function SignupPage() {
         body: JSON.stringify({ email, password, fullName }),
       });
 
-      const data = await res.json();
+      const data = await readJsonSafe(res);
 
       if (!res.ok) {
-        const errorMessage = data.error || "Signup failed. Please try again.";
+        const errorMessage =
+          data.error || "Signup failed. Please try again later.";
         captureEvent(EVENTS.AUTH_ERROR, {
           error_type: errorMessage,
           page: "signup",
@@ -77,6 +93,17 @@ export default function SignupPage() {
       }
 
       captureEvent(EVENTS.USER_SIGNED_UP, { method: "email" });
+      if (data.requiresEmailConfirmation || !data.session) {
+        setSuccess(
+          (data.message as string) ||
+            "Account created. Please check your inbox to confirm your email before logging in.",
+        );
+        setTimeout(() => {
+          router.replace("/auth/login?registered=true");
+          router.refresh();
+        }, 1200);
+        return;
+      }
       router.replace("/auth/login?registered=true");
       router.refresh();
     } catch (err) {

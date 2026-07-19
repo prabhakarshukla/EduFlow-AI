@@ -26,6 +26,23 @@ function getAuthErrorMessage(message: string) {
   return message;
 }
 
+async function readJsonSafe(
+  res: Response,
+): Promise<{ error?: string; [k: string]: unknown }> {
+  const text = await res.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text) as { error?: string; [k: string]: unknown };
+  } catch {
+    const looksLikeHtml = text.trimStart().startsWith("<");
+    return {
+      error: looksLikeHtml
+        ? "Cannot reach the login service. Please try again in a moment."
+        : "Login failed. Please try again later.",
+    };
+  }
+}
+
 function LoginPageContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,7 +90,7 @@ function LoginPageContent() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      const data = await readJsonSafe(res);
 
       if (!res.ok) {
         const errorMessage = data.error || "Login failed. Please try again.";
